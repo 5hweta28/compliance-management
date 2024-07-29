@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" href="style.css">
+
+	<title>Admin</title>
+</head>
+<body>
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-user'></i>
+			<span class="text">Admin</span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active" data-content="dashboard">
+				<a href="#">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li data-content="ai-verification">
+				<a href="#">
+					<i class='bx bx-folder' ></i>
+					<span class="text">AI Document Verification</span>
+				</a>
+			</li>
+			<li data-content="employee-details">
+				<a href="#">
+					<i class='bx bx-bar-chart-alt' ></i>
+					<span class="text">Employees</span>
+				</a>
+			</li>
+			<li data-content="task-management">
+				<a href="#">
+					<i class='bx bx-bar-chart-alt' ></i>
+					<span class="text">Task Management</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="../index.html" class="logout">
+					<i class='bx bx-log-out' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				</div>
+			</form>
+			<!-- <a href="#" class="profile">
+				<img src="img/people.png">
+			</a> -->
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<!-- Dashboard Content -->
+			<section id="dashboard" class="content-section">
+				<div class="head-title">
+					<div class="left">
+						<h2>Dashboard</h2>
+					</div>
+				</div>
+				<ul class="box-info">
+					<li>
+						<i class='bx bxs-user'></i>
+						<span class="text">
+							<h3 id="total-users">Loading...</h3>
+							<p>Total Users</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-file'></i>
+						<span class="text">
+							<h3 id="total-documents">Loading...</h3>
+							<p>Total Documents</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-file'></i>
+						<span class="text">
+							<h3 id="total-verified">Loading...</h3>
+							<p>Total Verified</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-file'></i>
+						<span class="text">
+							<h3 id="total-pending">Loading...</h3>
+							<p>Total Pending</p>
+						</span>
+					</li>
+				</ul>
+			
+				<div class="table-data">
+					<div class="order">
+						<div class="head">
+							<h3>Recent Activity</h3>
+						</div>
+						<table id="recent-activity-table">
+							<thead>
+								<tr>
+									<th>Doc Name</th>
+									<th>Type</th>
+									<th>Client</th>
+									<th>Date</th>
+									<th>Status</th>
+									<th>Assigned CA</th>
+								</tr>
+							</thead>
+							<tbody id="recent-activity-body">
+								<!-- Data will be inserted here dynamically -->
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+    // Fetch dashboard data on page load
+    fetchDashboardData();
+});
+
+function fetchDashboardData() {
+    fetch('dashboard_data.php')
+        .then(response => response.json())
+        .then(data => {
+            // Update total counts
+            document.getElementById('total-users').textContent = data.total_users;
+            document.getElementById('total-documents').textContent = data.total_documents;
+            document.getElementById('total-verified').textContent = data.total_verified;
+            document.getElementById('total-pending').textContent = data.total_pending;
+
+            // Update recent activity table
+            const recentActivityBody = document.getElementById('recent-activity-body');
+            recentActivityBody.innerHTML = ''; // Clear previous content
+
+            data.recent_activity.forEach(activity => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${activity.doc_name}</td>
+                    <td>${activity.type}</td>
+                    <td>${activity.client}</td>
+                    <td>${activity.date}</td>
+                    <td>${activity.status}</td>
+                    <td>${activity.assigned_ca}</td>
+                `;
+                recentActivityBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching dashboard data:', error));
+}
+
+			</script>
+
+			<!-- AI Document Verification Content -->
+			<section id="ai-verification" class="content-section" style="display: none;">
+				
+				<div class="order">
+					<table>
+						<thead>
+							<tr>
+								<th>Doc Name</th>
+								<th>Doc Num</th>
+								<th>Type</th>
+								<th>Action</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody id="overview-body">
+							<!-- Data will be inserted here dynamically -->
+						</tbody>
+					</table>
+				</div>
+			
+				<div class="head-title" style="display: none;" id="classification-title">
+					<div class="left">
+						<h3>Classification Result</h3>
+					</div>
+					<button class="close" onclick="closeClassificationResult()">Close</button>
+				</div>
+				<div class="container" style="display: none;" id="classification-container">
+					<div class="results">
+						<div class="ocr-result">
+							<h2>OCR Result:</h2>
+							<form id="ocr-form">
+								<!-- Show all the entries of the doc table -->
+							</form>
+						</div>
+						<div class="ai-verification">
+							<h2>Final Result:</h2>
+							<form id="final-form">
+								<!-- Editable form for doc table entries -->
+							</form>
+						</div>
+					</div>
+					<div class="buttons">
+						<!-- <button class="edit" onclick="enableEdit()">Edit</button> -->
+						<button class="confirm" onclick="confirmResult()">Confirm</button>
+					</div>
+				</div>
+			
+				<div id="image-viewer" style="display: none;">
+					<button class="close" onclick="closeImage()">Close</button>
+					<br>
+					<div class="image-container" style="position: relative; width: 100%; padding-top: 56.25%; overflow: hidden;">
+						<img id="document-image" src="" alt="Document Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;" />
+					</div>
+				</div>
+			</section>
+			
+
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+    fetchOverviewData();
+});
+
+function fetchOverviewData() {
+    fetch('fetch_overview_data.php')
+        .then(response => response.json())
+        .then(data => {
+            const overviewBody = document.getElementById('overview-body');
+            overviewBody.innerHTML = ''; // Clear previous content
+
+            data.forEach(doc => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${doc.doc_name}</td>
+                    <td>${doc.doc_num}</td>
+                    <td>${doc.type}</td>
+                    <td>
+                        <button onclick="viewClassificationResult('${doc.doc_num}')">Result</button>
+                        <button onclick="viewDocumentImage('${doc.doc_num}')">Doc</button>
+                    </td>
+                    <td>${doc.status}</td>
+                `;
+                overviewBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching overview data:', error));
+}
+
+function viewClassificationResult(docNum) {
+    console.log('Fetching classification result for docNum:', docNum);
+    fetch(`fetch_classification_result.php?doc_num=${docNum}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Received classification result data:', data);
+            document.querySelector('.order').style.display = 'none';
+            document.getElementById('classification-title').style.display = 'block';
+            document.getElementById('classification-container').style.display = 'block';
+
+            const fieldsToShow = ['doc_num', 'doctype', 'filename', 'supplier_name', 'purchase_date', 'due_date', 'total_amount'];
+            const ocrForm = document.getElementById('ocr-form');
+            ocrForm.innerHTML = ''; // Clear previous content
+
+            fieldsToShow.forEach(field => {
+                if (data[field] !== undefined) {
+                    const label = document.createElement('label');
+                    label.textContent = field.replace('_', ' ') + ':';
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.name = field;
+                    input.value = data[field];
+                    input.readOnly = true;
+                    ocrForm.appendChild(label);
+                    ocrForm.appendChild(input);
+                }
+            });
+
+            const finalForm = document.getElementById('final-form');
+            finalForm.innerHTML = ''; // Clear previous content
+
+            fieldsToShow.forEach(field => {
+                if (data[field] !== undefined) {
+                    const label = document.createElement('label');
+                    label.textContent = field.replace('_', ' ') + ':';
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.name = field;
+                    input.value = data[field];
+                    finalForm.appendChild(label);
+                    finalForm.appendChild(input);
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching classification result:', error));
+}
+
+
+function closeClassificationResult() {
+    document.getElementById('classification-title').style.display = 'none';
+    document.getElementById('classification-container').style.display = 'none';
+    document.querySelector('.order').style.display = 'block';
+}
+
+function viewDocumentImage(docNum) {
+    fetch(`fetch_document_image.php?doc_num=${docNum}`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('.order').style.display = 'none';
+            document.getElementById('image-viewer').style.display = 'block';
+            document.getElementById('document-image').src = 'data:image/jpeg;base64,' + data.doc_image;
+        })
+        .catch(error => console.error('Error fetching document image:', error));
+}
+
+function closeImage() {
+    document.getElementById('image-viewer').style.display = 'none';
+    document.querySelector('.order').style.display = 'block';
+}
+
+// function enableEdit() {
+//     const finalForm = document.getElementById('final-form');
+//     Array.from(finalForm.elements).forEach(input => {
+//         input.readOnly = false;
+//     });
+// }
+
+function confirmResult() {
+    const finalForm = document.getElementById('final-form');
+    const formData = new FormData(finalForm);
+
+    fetch('confirm_classification_result.php', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Classification result confirmed successfully.');
+                document.querySelector('.order').style.display = 'block';
+                document.getElementById('classification-title').style.display = 'none';
+                document.getElementById('classification-container').style.display = 'none';
+                fetchOverviewData();
+            } else {
+                alert('Error confirming classification result.');
+            }
+        })
+        .catch(error => console.error('Error confirming classification result:', error));
+}
+
+			</script>
+
+			<!-- Employee Content -->
+
+			<!-- <section id="employee-details" class="content-section" style="display: none;">
+				<div class="head-title">
+					<div class="left">
+						<h3>Employee Details</h3>
+					</div>
+				</div>
+				<div class="employee-list">
+					<table>
+						<thead>
+							<tr>
+								<th>NAME</th>
+								<th>EMAIL</th>
+								<th>ABOUT</th>
+								<th>PHONE</th>
+								<th>LOCATION</th>
+								<th>Completed</th>
+							</tr>
+						</thead>
+						<tbody id="employee-list-body">
+							
+						</tbody>
+					</table>
+				</div>
+			</section>
+			
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+					fetch('fetch_employee_details.php')
+						.then(response => response.text())
+						.then(data => {
+							document.getElementById('employee-list-body').innerHTML = data;
+						})
+						.catch(error => console.error('Error fetching employee details:', error));
+				});
+				</script> -->
+
+				<section id="employee-details" class="content-section" style="display: none;">
+					<div class="head-title">
+						<div class="left">
+							<h3>Employee Details</h3>
+						</div>
+					</div>
+					<div class="filter-options">
+						<label>
+							<input type="radio" name="filter_type" value="user" checked> User
+						</label>
+						<label>
+							<input type="radio" name="filter_type" value="pca"> PCA
+						</label>
+					</div>
+					<div class="employee-list">
+						<table>
+							<thead>
+								<tr>
+									<th>NAME</th>
+									<th>EMAIL</th>
+									<th>ABOUT</th>
+									<th class="phone-location">PHONE</th>
+									<th class="phone-location">LOCATION</th>
+								</tr>
+							</thead>
+							<tbody id="employee-list-body">
+								<!-- Employee details will be inserted here dynamically -->
+							</tbody>
+						</table>
+					</div>
+				</section>
+				
+				<script>
+					document.addEventListener('DOMContentLoaded', function() {
+						const filterOptions = document.querySelectorAll('.filter-options input[name="filter_type"]');
+						
+						filterOptions.forEach(option => {
+							option.addEventListener('change', function() {
+								loadEmployeeDetails(this.value);
+								togglePhoneLocationColumns(this.value);
+							});
+						});
+				
+						// Load employee details on page load with default 'user' filter
+						loadEmployeeDetails('user');
+					});
+				
+					function loadEmployeeDetails(filterType) {
+						fetch(`fetch_employee_details.php?filter_type=${filterType}`)
+							.then(response => response.text())
+							.then(data => {
+								document.getElementById('employee-list-body').innerHTML = data;
+							})
+							.catch(error => console.error('Error fetching employee details:', error));
+					}
+				
+					function togglePhoneLocationColumns(filterType) {
+						const phoneLocationColumns = document.querySelectorAll('.phone-location');
+						phoneLocationColumns.forEach(column => {
+							if (filterType === 'pca') {
+								column.style.display = 'none';
+							} else {
+								column.style.display = ''; // Restore default display
+							}
+						});
+					}
+				</script>
+				
+				
+				
+			
+
+			<!-- Task Management Content -->
+			<section id="task-management" class="content-section" style="display: none;">
+				<div class="head-title">
+					<div class="left">
+						<h1>Task Management</h1>
+					</div>
+				</div>
+				<!-- Add Task Management specific content here -->
+			
+				<table class="document-table">
+					<thead>
+						<tr>
+							<th>DOCUMENT NAME</th>
+							<th>Type</th>
+							<th>User email</th>
+							<th>STATUS</th>
+							<th>Assign CA</th>
+							<th>Completed</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- Table rows will be populated dynamically by script.js -->
+					</tbody>
+				</table>
+			
+			</section>
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+    // Fetch and display task data
+    fetch('fetch_task_data.php')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector('.document-table tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            data.forEach(task => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${task.doc_name}</td>
+                    <td>${task.type}</td>
+                    <td>${task.userID}</td>
+                    <td>${task.status}</td>
+                    <td><input type="text" class="assign-ca" value="${task.assignedCA}"></td>
+                    <td>${task.completion_status}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Add event listener for updating Assign CA
+            tableBody.addEventListener('change', function(event) {
+                if (event.target.classList.contains('assign-ca')) {
+                    const rowIndex = event.target.closest('tr').rowIndex - 1; // Adjust for table header
+                    const newAssignCA = event.target.value.trim();
+                    const docName = data[rowIndex].doc_name;
+
+                    // Update task in database via AJAX
+                    fetch('update_assign_ca.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ doc_name: docName, assignedCA: newAssignCA })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to update Assign CA');
+                        }
+                        return response.json();
+                    })
+                    .then(updatedTask => {
+                        console.log('Assign CA updated successfully:', updatedTask);
+                    })
+                    .catch(error => {
+                        console.error('Error updating Assign CA:', error);
+                    });
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching task data:', error);
+        });
+});
+
+			</script>
+			
+
+			
+		</main>
+	</section>
+	
+	<script src="script.js">
+	</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- <a href="/user/index.html">User</a>
+        <a href="/admin/index.html">Admin</a>
+        <a href="/pca/index.html">PCA</a> -->
+        <main>
+            <div class="image-section">
+                <img src="img.jpg" alt="Woman" class="main-image">
+            </div>
+            <div class="form-section">
+                <div class="form-container" id="signin-form">
+                    <h2>Welcome back <span class="wave">👋</span></h2>
+                    <p>Log in to your account</p>
+                    <form id="signinForm" action="auth.php" method="POST">
+                        <input type="hidden" name="form_type" value="signin">
+                        <div class="input-group">
+                            <input type="email" id="signin-email" name="email" placeholder="What is your e-mail?" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="signin-password" name="password" placeholder="Enter your password" required>
+                            <span class="password-toggle"></span>
+                        </div>
+                        <button type="submit" class="btn-primary">Continue</button>
+                        <p>Don't have an account? <a href="#" class="toggle-form">Sign up</a></p>
+                    </form>
+                </div>
+                <!-- Signup form -->
+                <div class="form-container hidden" id="signup-form">
+                    <h2>Create an account</h2>
+                    <form id="signupForm" action="auth.php" method="POST">
+                        <input type="hidden" name="form_type" value="signup">
+                        <div class="input-group">
+                            <input type="text" id="signup-name" name="name" placeholder="Full name" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" id="signup-email" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="pca-user">Are you a user or PCA?</label>
+                            <select id="pca-user" name="pca-user" required>
+                                <option value="">Select an option</option>
+                                <option value="yes">PCA</option>
+                                <option value="no">User</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="signup-password" name="password" placeholder="Password" required>
+                            <span class="password-toggle"></span>
+                        </div>
+                        <button type="submit" class="btn-primary">Sign up</button>
+                        <p>By signing up, you agree with the <a href="#">Terms of Use & Privacy Policy</a></p>
+                        <p>Already have an account? <a href="#" class="toggle-form">Sign in</a></p>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

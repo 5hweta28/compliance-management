@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" href="style.css">
+
+	<title>Partner CA</title>
+</head>
+<body>
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-user'></i>
+			<span class="text">Partner CA</span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active" data-content="dashboard">
+				<a href="#">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li data-content="ai-verification">
+				<a href="#">
+					<i class='bx bx-folder' ></i>
+					<span class="text">AI Document Verification</span>
+				</a>
+			</li>
+			<li data-content="task-management">
+				<a href="#">
+					<i class='bx bx-bar-chart-alt' ></i>
+					<span class="text">Task Management</span>
+				</a>
+			</li>
+			
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="../index.html" class="logout">
+					<i class='bx bx-log-out' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				</div>
+			</form>
+			<!-- <a href="#" class="profile">
+				<img src="img/people.png">
+			</a> -->
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<!-- Dashboard Content -->
+			<section id="dashboard" class="content-section">
+				<div class="head-title">
+					<div class="left">
+						<h1>Dashboard</h1>
+					</div>
+				</div>
+				<ul class="box-info">
+					<li>
+						<i class='bx bxs-file' ></i>
+						<span class="text">
+							<h3 id="assignedCount">0</h3>
+							<p>Assigned Document</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-file' ></i>
+						<span class="text">
+							<h3 id="pendingCount">0</h3>
+							<p>Pending Task</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-file' ></i>
+						<span class="text">
+							<h3 id="completedCount">0</h3>
+							<p>Completed Task</p>
+						</span>
+					</li>
+				</ul>
+			
+				<div class="table-data">
+					<div class="order">
+						<div class="head">
+							<h3>Recent Document</h3>
+						</div>
+						<table>
+							<thead>
+								<tr>
+									<th>User Email</th>
+									<th>Document Name</th>
+									<th>Document Number</th>
+									<th>Type</th>
+									<th>Status</th>
+									<th>Completion Status</th>
+								</tr>
+							</thead>
+							<tbody id="recentDocsBody">
+								<!-- Data will be populated here by JavaScript -->
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+			
+			
+			<script>
+				document.addEventListener("DOMContentLoaded", function () {
+    loadDashboardData();
+});
+
+function loadDashboardData() {
+    fetch('fetch_dashboard_data.php')
+        .then(response => response.json())
+        .then(data => {
+            // Update box info counts
+            document.getElementById('assignedCount').textContent = data.assigned_count;
+            document.getElementById('pendingCount').textContent = data.pending_count;
+            document.getElementById('completedCount').textContent = data.completed_count;
+
+            // Populate recent documents table
+            const tbody = document.getElementById('recentDocsBody');
+            tbody.innerHTML = '';
+
+            data.recent_docs.forEach(doc => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${doc.userID}</td>
+                    <td>${doc.doc_name}</td>
+                    <td>${doc.doc_num}</td>
+                    <td>${doc.type}</td>
+                    <td>${doc.status}</td>
+                    <td>${doc.completion_status}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+
+			</script>
+
+
+			<!-- AI Document Verification Content -->
+			<section id="ai-verification" class="content-section" style="display: none;">
+				
+				<div class="order">
+					<table>
+						<thead>
+							<tr>
+								<th>Doc Name</th>
+								<th>Doc Num</th>
+								<th>Type</th>
+								<th>Action</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody id="overview-body">
+							<!-- Data will be inserted here dynamically -->
+						</tbody>
+					</table>
+				</div>
+			
+				<div class="head-title" style="display: none;" id="classification-title">
+					<div class="left">
+						<h3>Classification Result</h3>
+					</div>
+					<button class="close" onclick="closeClassificationResult()">Close</button>
+				</div>
+				<div class="container" style="display: none;" id="classification-container">
+					<div class="results">
+						<div class="ocr-result">
+							<h2>OCR Result:</h2>
+							<form id="ocr-form">
+								<!-- Show all the entries of the doc table -->
+							</form>
+						</div>
+						<div class="ai-verification">
+							<h2>Final Result:</h2>
+							<form id="final-form">
+								<!-- Editable form for doc table entries -->
+							</form>
+						</div>
+					</div>
+					<div class="buttons">
+						<!-- <button class="edit" onclick="enableEdit()">Edit</button> -->
+						<button class="confirm" onclick="confirmResult()">Confirm</button>
+					</div>
+				</div>
+			
+				<div id="image-viewer" style="display: none;">
+					<button class="close" onclick="closeImage()">Close</button>
+					<br>
+					<div class="image-container" style="position: relative; width: 100%; padding-top: 56.25%; overflow: hidden;">
+						<img id="document-image" src="" alt="Document Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;" />
+					</div>
+				</div>
+			</section>
+			
+
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+    fetchOverviewData();
+});
+
+function fetchOverviewData() {
+    fetch('fetch_overview_data.php')
+        .then(response => response.json())
+        .then(data => {
+            const overviewBody = document.getElementById('overview-body');
+            overviewBody.innerHTML = ''; // Clear previous content
+
+            data.forEach(doc => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${doc.doc_name}</td>
+                    <td>${doc.doc_num}</td>
+                    <td>${doc.type}</td>
+                    <td>
+                        <button onclick="viewClassificationResult('${doc.doc_num}')">Result</button>
+                        <button onclick="viewDocumentImage('${doc.doc_num}')">Doc</button>
+                    </td>
+                    <td>${doc.status}</td>
+                `;
+                overviewBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching overview data:', error));
+}
+
+function viewClassificationResult(docNum) {
+    console.log('Fetching classification result for docNum:', docNum);
+    fetch(`fetch_classification_result.php?doc_num=${docNum}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Received classification result data:', data);
+            document.querySelector('.order').style.display = 'none';
+            document.getElementById('classification-title').style.display = 'block';
+            document.getElementById('classification-container').style.display = 'block';
+
+            const fieldsToShow = ['doc_num', 'doctype', 'filename', 'supplier_name', 'purchase_date', 'due_date', 'total_amount'];
+            const ocrForm = document.getElementById('ocr-form');
+            ocrForm.innerHTML = ''; // Clear previous content
+
+            fieldsToShow.forEach(field => {
+                if (data[field] !== undefined) {
+                    const label = document.createElement('label');
+                    label.textContent = field.replace('_', ' ') + ':';
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.name = field;
+                    input.value = data[field];
+                    input.readOnly = true;
+                    ocrForm.appendChild(label);
+                    ocrForm.appendChild(input);
+                }
+            });
+
+            const finalForm = document.getElementById('final-form');
+            finalForm.innerHTML = ''; // Clear previous content
+
+            fieldsToShow.forEach(field => {
+                if (data[field] !== undefined) {
+                    const label = document.createElement('label');
+                    label.textContent = field.replace('_', ' ') + ':';
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.name = field;
+                    input.value = data[field];
+                    finalForm.appendChild(label);
+                    finalForm.appendChild(input);
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching classification result:', error));
+}
+
+
+function closeClassificationResult() {
+    document.getElementById('classification-title').style.display = 'none';
+    document.getElementById('classification-container').style.display = 'none';
+    document.querySelector('.order').style.display = 'block';
+}
+
+function viewDocumentImage(docNum) {
+    fetch(`fetch_document_image.php?doc_num=${docNum}`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('.order').style.display = 'none';
+            document.getElementById('image-viewer').style.display = 'block';
+            document.getElementById('document-image').src = 'data:image/jpeg;base64,' + data.doc_image;
+        })
+        .catch(error => console.error('Error fetching document image:', error));
+}
+
+function closeImage() {
+    document.getElementById('image-viewer').style.display = 'none';
+    document.querySelector('.order').style.display = 'block';
+}
+
+// function enableEdit() {
+//     const finalForm = document.getElementById('final-form');
+//     Array.from(finalForm.elements).forEach(input => {
+//         input.readOnly = false;
+//     });
+// }
+
+function confirmResult() {
+    const finalForm = document.getElementById('final-form');
+    const formData = new FormData(finalForm);
+
+    fetch('confirm_classification_result.php', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Classification result confirmed successfully.');
+                document.querySelector('.order').style.display = 'block';
+                document.getElementById('classification-title').style.display = 'none';
+                document.getElementById('classification-container').style.display = 'none';
+                fetchOverviewData();
+            } else {
+                alert('Error confirming classification result.');
+            }
+        })
+        .catch(error => console.error('Error confirming classification result:', error));
+}
+
+			</script>
+			
+
+
+			<!-- Task Management Content -->
+<section id="task-management" class="content-section" style="display: none;">
+    <div class="head-title">
+        <div class="left">
+            <h1>Task Management</h1>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>NO.</th>
+                <th>Task Name</th>
+                <th>Type</th>
+                <th>Client</th>
+                <th>Doc Num</th>
+                <th>STATUS</th>
+                <th>Completion status</th>
+                <th>Mark as Done</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated here by JavaScript -->
+        </tbody>
+    </table>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    loadTasks();
+});
+
+function loadTasks() {
+    fetch('fetch_tasks.php')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('#task-management table tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((task, index) => {
+                const row = document.createElement('tr');
+                const completionStatus = task.completion_status === 'done' ? 'checked' : '';
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="task-name"><a href="#">${task.doc_name}</a></td>
+                    <td>${task.type}</td>
+                    <td>${task.userID}</td>
+                    <td>${task.doc_num}</td>
+                    <td><span class="status verified">${task.status}</span></td>
+                    <td>${task.completion_status}</td>
+                    <td class="checkbox"><input type="checkbox" ${completionStatus} data-doc-num="${task.doc_num}"></td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+            document.querySelectorAll('.checkbox input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    updateTaskStatus(this.dataset.docNum, this.checked ? 'done' : 'not done');
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching tasks:', error);
+        });
+}
+
+function updateTaskStatus(docNum, status) {
+    fetch('update_task_status.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `doc_num=${docNum}&completion_status=${status}`
+    })
+    .then(response => response.text())
+    .then(result => {
+        if (result !== 'success') {
+            alert('Failed to update task status');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating task status:', error);
+    });
+}
+</script>
+
+			
+		</main>
+	</section>
+	
+	<script src="script.js">
+	</script>
+</body>
+</html>

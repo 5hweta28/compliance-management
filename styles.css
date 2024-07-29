@@ -1,0 +1,191 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.logo {
+    width: 50px;
+}
+
+.header-right button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+}
+
+.language-icon::before, .help-icon::before {
+    content: url('language-icon.png'); /* Replace with the path to your icon image */
+}
+
+.help-icon::before {
+    content: url('help-icon.png'); /* Replace with the path to your icon image */
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+}
+
+.image-section {
+    flex: 1;
+    text-align: center;
+}
+
+.main-image {
+    width: 80%;
+}
+
+.avatars {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+    flex: 1;
+    padding: 20px;
+}
+
+.form-container {
+    max-width: 400px;
+    margin: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+.wave {
+    animation: wave-animation 1s infinite;
+    display: inline-block;
+}
+
+@keyframes wave-animation {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(20deg); }
+}
+
+p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: url('eye-icon.png') no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.forgot-password {
+    color: #6c63ff;
+    text-decoration: none;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background-color: #6c63ff;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.social-login {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background-size: contain;
+}
+
+.google { background: url('google-icon.png') no-repeat center center; }
+.facebook { background: url('facebook-icon.png') no-repeat center center; }
+.apple { background: url('apple-icon.png') no-repeat center center; }
+
+a {
+    color: #6c63ff;
+    text-decoration: none;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" href="style.css">
+
+	<title>User</title>
+</head>
+<body>
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-user'></i>
+			<span class="text">User</span>
+		</a>
+		<ul class="side-menu top">
+            <li class="active" data-content="profile">
+				<a href="#">
+					<i class='bx bxs-user' ></i>
+					<span class="text">Profile</span>
+				</a>
+			</li>
+			<li data-content="upload-document">
+				<a href="#">
+					<i class='bx bxs-file' ></i>
+					<span class="text">Upload Document</span>
+				</a>
+			</li>
+			<li data-content="task">
+				<a href="#">
+					<i class='bx bx-folder' ></i>
+					<span class="text">Task</span>
+				</a>
+			</li>
+			
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="../index.html" class="logout">
+					<i class='bx bx-log-out' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				</div>
+			</form>
+			<!-- <a href="#" class="profile">
+				<img src="img/people.png">
+			</a> -->
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<!-- Profile Content -->
+			<section id="profile" class="content-section">
+				<div class="head-title">
+					<!-- <div class="left">
+						<h2>Profile</h2>
+						<br>
+					</div> -->
+				</div>
+
+                <div class="profile-info" id="profile-info">
+					<h1>Name: 
+					<h2 id="profile-name">Loading...</h2></h1>
+					<br>
+					<!-- <p id="profile-email">Email: Loading...</p> -->
+					<button id="edit-button">Edit</button>
+					<button id="view-button">View Profile</button>
+				</div>
+	
+				<div class="edit-profile" id="edit-profile" style="display: none;">
+					<h2>Edit Profile</h2>
+					<form id="edit-form">
+						<div class="input-group">
+							<label for="edit-name">Name:</label>
+							<input type="text" id="edit-name" name="edit-name">
+						</div>
+						<div class="input-group">
+							<label for="edit-phone">Phone:</label>
+							<input type="text" id="edit-phone" name="edit-phone">
+						</div>
+						<div class="input-group">
+							<label for="edit-location">Location:</label>
+							<input type="text" id="edit-location" name="edit-location">
+						</div>
+						<button type="button" id="save-edit-button">Save</button>
+						<br>
+						<button type="button" id="cancel-edit-button">Cancel</button>
+					</form>
+				</div>
+	
+				<div class="view-profile" id="view-profile" style="display: none;">
+					<h2>View Profile</h2>
+					<div id="profile-details">
+						<!-- Profile details will be populated here dynamically -->
+					</div>
+					<button type="button" id="back-view-button">Back</button>
+				</div>
+				
+				
+                <ul class="box-info">
+					<li>
+						<i class='bx bxs-file' ></i>
+						<span class="text">
+							<h3 id="assigned-doc-count">Loading...</h3>
+							<p>Assigned Doc</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-file' ></i>
+						<span class="text">
+							<h3 id="pending-task-count">Loading...</h3>
+							<p>Pending Task</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-file' ></i>
+						<span class="text">
+							<h3 id="completed-task-count">Loading...</h3>
+							<p>Completed Task</p>
+						</span>
+					</li>
+				</ul>
+
+				
+			</section>
+
+			
+			
+
+
+			<section id="upload-document" class="content-section" style="display: none;">
+				<div class="upload-container">
+					<form onsubmit="mindeeSubmit(event)">
+						<div class="upload-box">
+							<p>Drop file here</p>
+							<p>Supported formats: PDF, PNG, JPG, JPEG</p>
+							<p>OR</p>
+							<label for="my-file-input">Browse file</label>
+							<input type="file" id="my-file-input" name="file" accept=".pdf,.png,.jpg,.jpeg" />
+						</div>
+						<input type="submit" class="submit-btn" value="Upload" />
+						<div class="form-group">
+							<label for="document-type">Document Type</label>
+							<input type="text" id="document-type" readonly />
+						</div>
+						<div class="form-group">
+							<label for="file-name">File Name</label>
+							<input type="text" id="file-name" readonly />
+						</div>
+						<div class="form-group">
+							<label for="supplier-name">Supplier Name</label>
+							<input type="text" id="supplier-name" readonly />
+						</div>
+						<div class="form-group">
+							<label for="document-number">Document Number</label>
+							<input type="text" id="document-number" readonly />
+						</div>
+						<div class="form-group">
+							<label for="purchase-date">Purchase Date</label>
+							<input type="text" id="purchase-date" readonly />
+						</div>
+						<div class="form-group">
+							<label for="due-date">Due Date</label>
+							<input type="text" id="due-date" readonly />
+						</div>
+						<div class="form-group">
+							<label for="total-amount">Total Amount</label>
+							<input type="text" id="total-amount" readonly />
+						</div>
+					</form>
+					<pre id="output"></pre>
+				</div>
+			</section>
+		
+			<section id="task" class="content-section" style="display: none;">
+				<div class="head-title">
+					<div class="left">
+						<h2>Task Management</h2>
+					</div>
+				</div>
+				<div class="container">
+					
+					<table>
+						<thead>
+							<tr>
+								<th>NO.</th>
+								<th>Doc Name</th>
+								<th>Type</th>
+								<th>DATE</th>
+								<th>STATUS</th>
+								<th>Assigned CA</th>
+								<th>Completion Status</th>
+							</tr>
+						</thead>
+						<tbody id="task-table-body">
+							<!-- Dynamic content goes here -->
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+
+			
+		</main>
+	</section>
+	
+	<script src="script.js">
+	</script>
+</body>
+</html>
