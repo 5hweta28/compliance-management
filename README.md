@@ -2,7 +2,7 @@
  
 This project outlines the development of a revolutionary online platform for chartered accountants, leveraging modern Al and never-before-seen features to streamline compliance management and verification for their clients
 
-Core Functionalities:
+Core Functionalities
 
 1. Secure Document Uploads:
 
@@ -21,7 +21,5 @@ Core Functionalities:
 - Task allocation systern assigns pre-verified documents to appropriate team members.
 
 - Real-time progress tracking allows accountants and clients to monitor the verification process
-
-
 
 
