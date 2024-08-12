@@ -1,6 +1,8 @@
 ﻿# Compliance Management
 
  ( https://c-m.42web.io/ )
+
+https://github.com/user-attachments/assets/739f727d-5619-47e6-a672-e868d3591163
  
 This project outlines the development of a revolutionary online platform for chartered accountants, leveraging modern Al and never-before-seen features to streamline compliance management and verification for their clients
 
