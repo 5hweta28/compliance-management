@@ -1,7 +1,5 @@
 ﻿# Compliance Management
-ADMIN-
-email:admin@gmail.com
-password: admin@123
+ADMIN | email:admin@gmail.com | password: admin@123
  ( https://c-m.42web.io/ )
 
 https://github.com/user-attachments/assets/739f727d-5619-47e6-a672-e868d3591163
